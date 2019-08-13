@@ -4,7 +4,18 @@ import { tokenSymbols } from '../../utils';
 
 function Table(props) {
 
-  const mint = (protocol, token) => {
+  const mint = async (protocol, token) => {
+    switch (protocol) {
+      case 'compound':
+
+        break;
+
+      case 'dydx':
+
+        break;
+      default:
+        break;
+    }
     console.log(protocol, token, "EARN");
   }
   const borrow = (protocol, token) => {
