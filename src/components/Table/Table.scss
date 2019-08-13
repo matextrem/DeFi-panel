@@ -1,0 +1,122 @@
+.interest-rates {
+  -webkit-font-smoothing: antialiased;
+  font-family: Flama Basic, sans-serif;
+  color: #1f2533;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-x: hidden;
+  margin: 24px 0;
+  min-height: 460px;
+
+  .table {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .static {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 150px;
+  }
+  .token-row {
+    display: flex;
+    flex-direction: row;
+    padding: 8px 0;
+    height: 48px;
+  }
+  .centered {
+    text-align: center;
+  }
+  .token-column {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: column;
+    margin-right: 10px;
+  }
+  .delimiter {
+    border-bottom: 1px solid rgba(35, 40, 51, 0.12);
+  }
+  .vertical-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 10px;
+  }
+  .category-row {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    margin-bottom: 16px;
+  }
+  .protocol-rows {
+    display: flex;
+    flex-direction: column;
+  }
+  .protocol-block {
+    margin-bottom: 12px;
+  }
+  .protocol-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .action-values {
+    height: 50px;
+  }
+  .rate-value {
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+    height: 20px;
+  }
+  .lend {
+    color: #00b3b3;
+  }
+  .borrow {
+    color: #8830ce;
+  }
+  .name {
+    height: 30px;
+    font-size: 16px;
+    text-transform: capitalize;
+  }
+  .protocol-column {
+    flex-grow: 0;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+  .percentage-column {
+    .rate-value {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  .percentage {
+    align-items: flex-start;
+    padding-left: 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 1px 8px;
+  }
+  .icon {
+    vertical-align: bottom;
+    box-sizing: border-box;
+    padding: 0 8px;
+  }
+  .dynamic {
+    overflow-x: auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .horizontal-container {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+}
