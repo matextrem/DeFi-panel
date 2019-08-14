@@ -1,0 +1,28 @@
+.form-row {
+  &--wrapper {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 3px;
+    padding: 8px 10px;
+    &:nth-child(odd) {
+      background-color: #f5f5f5;
+    }
+  }
+  &--text {
+    color: #666;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  &--value {
+    color: #666;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: right;
+  }
+}
+
+.form-rows--container {
+  margin-bottom: 28px;
+}

@@ -1,29 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Table.scss';
 import { tokenSymbols } from '../../utils';
+import TxModal from '../TxModal';
 
 function Table(props) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedMarket, setSelectedMarket] = useState({});
+  const [isDeposited, setDeposited] = useState(false);
 
-  const mint = async (protocol, token) => {
-    switch (protocol) {
-      case 'compound':
-
-        break;
-
-      case 'dydx':
-
-        break;
-      default:
-        break;
+  const setModalOptions = (protocol, token) => {
+    const selectedMarket = protocol.rates.find(rate => rate.token === token);
+    const market = {
+      symbol: selectedMarket.token,
+      interestRate: isDeposited ? selectedMarket.supply_rate : selectedMarket.borrow_rate,
+      protocol
     }
-    console.log(protocol, token, "EARN");
+    setSelectedMarket(market);
+    setModalOpen(true);
+  }
+  const mint = async (protocol, token) => {
+    setDeposited(true);
+    setModalOptions(protocol, token);
   }
   const borrow = (protocol, token) => {
-    console.log(protocol, token, "BORROW");
+    setDeposited(false);
+    setModalOptions(protocol, token);
   }
-  const { protocols } = props;
+
+  const closeModal = () => setModalOpen(false);
+
+  const { account, protocols, web3 } = props;
   return (
     <div className="interest-rates">
+      <TxModal isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        isDeposited={isDeposited}
+        title={isDeposited ? `Deposit ${selectedMarket.symbol}` : `Borrow ${selectedMarket.symbol}`}
+        market={selectedMarket}
+        account={account}
+        web3={web3}
+      />
       {protocols.length === 0 ? 'Loading...' : (
         <div className="table">
           <div className="static">
@@ -82,10 +98,10 @@ function Table(props) {
                       <div className="protocol-row action-values">
                         {protocol.rates.map(rate => (
                           <div key={rate.token} className="percentage-column">
-                            <div className="percentage lend" onClick={() => mint(protocol.name, rate.token)}>
+                            <div className="percentage lend" onClick={() => mint(protocol, rate.token)}>
                               <div className="rate-value">{rate.supply_rate}%</div>
                             </div>
-                            <div className="percentage borrow inverse" onClick={() => borrow(protocol.name, rate.token)}>
+                            <div className="percentage borrow inverse" onClick={() => borrow(protocol, rate.token)}>
                               <div className="rate-value">{rate.borrow_rate}%</div>
                             </div>
                           </div>

@@ -8,6 +8,10 @@ import rateService from '../../services/rateService';
 import Table from '../Table';
 
 function Panel() {
+    const [protocols, setProtocols] = useState([]);
+    const [account, setAccount] = useState('');
+    const [provider, setProvider] = useState({});
+
     useEffect(() => {
         const fetchData = async () => {
             const protocols = await rateService.get();
@@ -18,12 +22,10 @@ function Panel() {
         };
         fetchData();
     }, []);
-    const [protocols, setProtocols] = useState([]);
-    const [account, setAccount] = useState({});
-    const [provider, setProvider] = useState({});
+
     return (
         <div className="defi-panel">
-            <Table protocols={protocols} />
+            <Table web3={provider} account={account} protocols={protocols} />
         </div>
     );
 }
