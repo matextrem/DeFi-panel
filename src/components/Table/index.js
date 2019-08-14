@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Table.scss';
 import { tokenSymbols } from '../../utils';
+import transactionService from '../../services/transactionService';
 import TxModal from '../TxModal';
 
 function Table(props) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedMarket, setSelectedMarket] = useState({});
   const [isDeposited, setDeposited] = useState(false);
+  const [accountBalance, setAccountBalance] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const balance = await transactionService.getTokenBalance(props.web3, selectedMarket.symbol);
+      setAccountBalance(balance);
+    };
+    const isWeb3 = Object.keys(props.web3).length !== 0;
+    if (isWeb3 && selectedMarket.symbol)
+      fetchData();
+  }, [props.web3, selectedMarket]);
 
   const setModalOptions = (protocol, token) => {
     const selectedMarket = protocol.rates.find(rate => rate.token === token);
@@ -38,6 +50,7 @@ function Table(props) {
         title={isDeposited ? `Deposit ${selectedMarket.symbol}` : `Borrow ${selectedMarket.symbol}`}
         market={selectedMarket}
         account={account}
+        accountBalance={accountBalance}
         web3={web3}
       />
       {protocols.length === 0 ? 'Loading...' : (

@@ -7,12 +7,10 @@ const TransactionService = {
         const amount = (Number(value) * Math.pow(10, tokenDecimals)).toString();
         return { CTokenContract, amount };
     },
-    getTransaction: async (web3, data, to) => {
+    getTransaction: async (web3, data, to, cb) => {
         // get transaction count, later will used as nonce
-        // const count = await web3.eth.getTransactionCount(process.env.MY_ADDRESS);
         const from = (await web3.eth.getAccounts())[0];
         const rawTransaction = {
-            //nonce: web3.utils.toHex(count),
             gasPrice: web3.utils.toHex(20 * 1e9),
             gasLimit: web3.utils.toHex(400000),
             from,
@@ -21,13 +19,27 @@ const TransactionService = {
             data
         };
         //sending transacton via web3js module
-        return await web3.eth.sendTransaction(rawTransaction);
+        return web3.eth.sendTransaction(rawTransaction, cb);
     },
 
-    mintCompound: async (web3, value, token) => {
+    getTokenBalance: async (web3, token) => {
+        const ERC20Contract = new web3.eth.Contract(ERC20.ABI, ERC20[token].address);
+        const account = (await web3.eth.getAccounts())[0];
+        const balance = await ERC20Contract.methods.balanceOf(account).call();
+        const newTokenBalance = parseFloat(balance) / Math.pow(10, ERC20[token].decimals);
+        return newTokenBalance;
+    },
+
+    mintCompound: async (web3, value, token, cb) => {
         const { CTokenContract, amount } = await TransactionService.approveTx(web3, value, token);
         const data = await CTokenContract.methods.mint(amount).encodeABI();
-        return await TransactionService.getTransaction(web3, data, cTokens[token].address);
+        return await TransactionService.getTransaction(web3, data, cTokens[token].address, cb);
+    },
+
+    borrowCompound: async (web3, value, token, cb) => {
+        const { CTokenContract, amount } = await TransactionService.approveTx(web3, value, token);
+        const data = await CTokenContract.methods.borrow(amount).encodeABI();
+        return await TransactionService.getTransaction(web3, data, cTokens[token].address, cb);
     }
 };
 

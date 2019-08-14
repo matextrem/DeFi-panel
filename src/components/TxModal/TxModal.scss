@@ -35,6 +35,18 @@
   }
 }
 
+.modal-note {
+  color: #999;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.42;
+  margin: 0 0 15px;
+  &--error {
+    color: lightcoral;
+    font-weight: 700;
+  }
+}
+
 .modal-text {
   color: #444;
   font-size: 14px;

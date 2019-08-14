@@ -1,0 +1,18 @@
+.loading-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.loading-animate {
+  animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

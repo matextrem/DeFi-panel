@@ -7,8 +7,8 @@ export const cTokens = {
     'USDC': { address: "0x5b281a6dda0b271e91ae35de655ad301c976edb1", ABI: ABIS.USDC }
 }
 export const ERC20 = {
-    'DAI': { address: "0xef77ce798401dac8120f77dc2debd5455eddacf9", marketId: 1, decimals: 18 },
-    'USDC': { address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", marketId: 2, decimals: 6 },
+    'DAI': { address: "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea", marketId: 1, decimals: 18 },
+    'USDC': { address: "0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b", marketId: 2, decimals: 6 },
     ABI: ABIS.ERC20
 }
 
