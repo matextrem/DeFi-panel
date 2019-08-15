@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import isEqual from 'lodash/isEqual';
 import './Panel.scss';
 import { getAccount } from '../../utils'
 //Services
@@ -14,14 +15,20 @@ function Panel() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const protocols = await rateService.get();
-            setProtocols(protocols);
+            const protocolsList = await rateService.get();
+            setProtocols(protocolsList);
             const { account, provider } = await getAccount();
             setAccount(account);
             setProvider(provider);
         };
-        fetchData();
-    }, []);
+        if (!isEqual(previousInputs.current, [protocols, account]))
+            fetchData();
+    });
+
+    const previousInputs = useRef();
+    useEffect(() => {
+        previousInputs.current = [protocols, account];
+    });
 
     return (
         <div className="defi-panel">

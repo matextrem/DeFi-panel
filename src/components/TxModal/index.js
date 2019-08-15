@@ -30,7 +30,10 @@ function TxModal(props) {
 
   const handleCallback = (err, transactionHash) => {
     console.log("TxHash", transactionHash);
-    if (err) setError(true);
+    if (err) {
+      setError(true);
+      setLoading(false)
+    }
   }
 
   const deposit = async () => {
@@ -39,7 +42,6 @@ function TxModal(props) {
         await transactionService.mintCompound(web3, tokens, market.symbol, handleCallback);
         break;
       case 'dydx':
-
         break;
 
       default:
@@ -51,7 +53,7 @@ function TxModal(props) {
   const borrow = async () => {
     switch (market.protocol.name) {
       case 'compound':
-        await transactionService.mintCompound(web3, tokens, market.symbol, handleCallback);
+        await transactionService.borrowCompound(web3, tokens, market.symbol, handleCallback);
         break;
       case 'dydx':
 
@@ -72,6 +74,8 @@ function TxModal(props) {
 
   const closeModal = () => {
     setError(false);
+    setTokens('');
+    setDisabledButton(true);
     onRequestClose();
   }
   const { market, onRequestClose, title, isDeposited, account, web3, ...restProps } = props;
@@ -104,7 +108,7 @@ function TxModal(props) {
             {error && <div className="modal-note--error">There was an error making the {isDeposited ? 'deposit' : 'borrow'}.</div>}
           </p>
         )}
-      <Button disabled={disbledButton} handleClick={handleClick} className="modal-send-button">
+      <Button disabled={disbledButton} handleClick={handleClick} className={`modal-send-button ${!isDeposited && 'modal-send-button--inverse'}`}>
         {isDeposited ? 'Deposit' : 'Borrow'}
       </Button>
     </Modal>

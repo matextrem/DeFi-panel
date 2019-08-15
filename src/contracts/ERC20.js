@@ -221,4 +221,4 @@ const ABI = [
     }
 ]
 
-module.exports = ABI;
+export default ABI;

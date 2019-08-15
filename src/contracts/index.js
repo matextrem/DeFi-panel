@@ -1,10 +1,15 @@
-const DAI_ABI = require("../contracts/DAI");
-const USDC_ABI = require("../contracts/USDC");
-const ERC20_ABI = require("../contracts/ERC20");
+import { DAI_ABI_RINKEBY } from '../contracts/DAI';
+import { USDC_ABI_RINKEBY } from '../contracts/USDC';
+import ERC20_ABI from '../contracts/ERC20';
 
-module.exports = {
-    DAI: DAI_ABI,
-    USDC: USDC_ABI,
+
+export default {
+    DAI: {
+        4: DAI_ABI_RINKEBY
+    },
+    USDC: {
+        4: USDC_ABI_RINKEBY
+    },
     ERC20: ERC20_ABI
 
 }

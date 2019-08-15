@@ -1,8 +1,12 @@
-import { cTokens, ERC20 } from '../utils';
+import { cTokens, ERC20, getNetwork } from '../utils';
 const TransactionService = {
     approveTx: async (web3, value, token) => {
         //creating contracts object
-        const CTokenContract = new web3.eth.Contract(cTokens[token].ABI, cTokens[token].address);
+        const networkId = await getNetwork(web3);
+        const CTokenContract = new web3.eth.Contract(
+            cTokens[token][networkId].ABI,
+            cTokens[token][networkId].address
+        );
         const tokenDecimals = ERC20[token].decimals;
         const amount = (Number(value) * Math.pow(10, tokenDecimals)).toString();
         return { CTokenContract, amount };
@@ -23,7 +27,8 @@ const TransactionService = {
     },
 
     getTokenBalance: async (web3, token) => {
-        const ERC20Contract = new web3.eth.Contract(ERC20.ABI, ERC20[token].address);
+        const networkId = await getNetwork(web3);
+        const ERC20Contract = new web3.eth.Contract(ERC20.ABI, ERC20[token][networkId].address);
         const account = (await web3.eth.getAccounts())[0];
         const balance = await ERC20Contract.methods.balanceOf(account).call();
         const newTokenBalance = parseFloat(balance) / Math.pow(10, ERC20[token].decimals);
@@ -31,16 +36,19 @@ const TransactionService = {
     },
 
     mintCompound: async (web3, value, token, cb) => {
+        const networkId = await getNetwork(web3);
         const { CTokenContract, amount } = await TransactionService.approveTx(web3, value, token);
         const data = await CTokenContract.methods.mint(amount).encodeABI();
-        return await TransactionService.getTransaction(web3, data, cTokens[token].address, cb);
+        return await TransactionService.getTransaction(web3, data, cTokens[token][networkId].address, cb);
     },
 
     borrowCompound: async (web3, value, token, cb) => {
+        const networkId = await getNetwork(web3);
         const { CTokenContract, amount } = await TransactionService.approveTx(web3, value, token);
         const data = await CTokenContract.methods.borrow(amount).encodeABI();
-        return await TransactionService.getTransaction(web3, data, cTokens[token].address, cb);
+        return await TransactionService.getTransaction(web3, data, cTokens[token][networkId].address, cb);
     }
+
 };
 
 export default TransactionService;

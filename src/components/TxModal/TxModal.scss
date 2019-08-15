@@ -62,7 +62,10 @@
   margin: 0 0 25px;
 }
 
-.modal-send--button {
+.modal-send-button {
   text-transform: uppercase;
   width: 100%;
+  &--inverse {
+    background-color: #8830ce;
+  }
 }

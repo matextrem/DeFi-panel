@@ -1,14 +1,40 @@
 import Web3 from 'web3';
 import ABIS from '../contracts';
 
+//  Rikenby: 4
+//  Mainnet: 1
+//  Ropsten: 3
+//  Kovan: 42
 
 export const cTokens = {
-    'DAI': { address: "0x6d7f0754ffeb405d23c51ce938289d4835be3b14", ABI: ABIS.DAI },
-    'USDC': { address: "0x5b281a6dda0b271e91ae35de655ad301c976edb1", ABI: ABIS.USDC }
+    'DAI': {
+        4: {
+            address: "0x6d7f0754ffeb405d23c51ce938289d4835be3b14",
+            ABI: ABIS.DAI[4]
+        }
+    },
+    'USDC': {
+        4: {
+            address: "0x5b281a6dda0b271e91ae35de655ad301c976edb1",
+            ABI: ABIS.USDC[4]
+        }
+    }
 }
 export const ERC20 = {
-    'DAI': { address: "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea", marketId: 1, decimals: 18 },
-    'USDC': { address: "0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b", marketId: 2, decimals: 6 },
+    'DAI': {
+        4: {
+            address: "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea"
+        },
+        marketId: 1,
+        decimals: 18
+    },
+    'USDC': {
+        4: {
+            address: "0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b"
+        },
+        marketId: 2,
+        decimals: 6
+    },
     ABI: ABIS.ERC20
 }
 

@@ -4,9 +4,9 @@ import React from 'react';
 import './Button.scss';
 
 const Button = (props) => {
-    const { className, children, handleClick, disabled } = props;
+    const { className, children, handleClick, disabled, customStyles } = props;
     return (
-        <button disabled={disabled} onClick={handleClick} className={`button-container ${className}`}>
+        <button style={customStyles} disabled={disabled} onClick={handleClick} className={`button-container ${className}`}>
             {children}
         </button>
     );
