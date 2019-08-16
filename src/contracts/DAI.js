@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const DAI_ABI_RINKEBY = [
     {
         "constant": true,

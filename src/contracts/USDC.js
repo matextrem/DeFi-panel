@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const USDC_ABI_RINKEBY = [
     {
         "constant": true,

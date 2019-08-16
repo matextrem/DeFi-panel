@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const ABI = [
     {
         "constant": true,
