@@ -56,6 +56,11 @@ export const protocolNetworks = {
   dydx: [1, 42]
 }
 
+export const isContractDeployed = (networkId, token) => {
+  return Object.keys(cTokens[token]).includes(networkId) &&
+  Object.keys(ERC20[token]).includes(networkId)
+}
+
 export const protocolInNetwork = (protocol, networkId) => {
   return protocolNetworks[protocol].includes(networkId) && networkId !== 0
 }

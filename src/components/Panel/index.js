@@ -3,27 +3,30 @@ import './Panel.scss'
 import TxModal from '../TxModal'
 import transactionService from '../../services/transactionService'
 import Loading from '../common/Loading'
+import ErrorBoundary from '../common/ErrorBoundary'
+import { isContractDeployed } from '../../utils'
 
 // Components
 import Table from '../Table'
 
 function Panel (props) {
-  const { account, web3, protocols } = props
+  const { account, web3, protocols, networkId } = props
   const [isModalOpen, setModalOpen] = useState(false)
+  const [error, setError] = useState(null)
   const [selectedMarket, setSelectedMarket] = useState({})
   const [isDeposited, setDeposited] = useState(false)
   const [accountBalance, setAccountBalance] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
-      const balance = await transactionService.getTokenBalance(props.web3, selectedMarket.symbol)
-      setAccountBalance(balance)
+      const balance = await transactionService.getTokenBalance(web3, selectedMarket.symbol)
+      setAccountBalance(balance || 0)
     }
-    const isWeb3 = Object.keys(props.web3).length !== 0
+    const isWeb3 = Object.keys(web3).length !== 0
     if (isWeb3 && selectedMarket.symbol) {
       fetchData()
     }
-  }, [props.web3, selectedMarket])
+  }, [web3, selectedMarket])
 
   const setModalOptions = (protocol, token) => {
     const selectedMarket = protocol.rates.find(rate => rate.token === token)
@@ -36,8 +39,10 @@ function Panel (props) {
     setModalOpen(true)
   }
   const handleMint = async (protocol, token) => {
-    setDeposited(true)
-    setModalOptions(protocol, token)
+    if (isContractDeployed(networkId, token)) {
+      setDeposited(true)
+      setModalOptions(protocol, token)
+    } else setError({ message: 'Contract is not deployed in the selected network. Try switching it.' })
   }
   const handleBorrow = (protocol, token) => {
     setDeposited(false)
@@ -57,7 +62,8 @@ function Panel (props) {
         web3={web3}
       />
       {protocols.length === 0 ? <div className='defi-panel--loading'><Loading /></div> : (
-        <Table handleMint={handleMint} handleBorrow={handleBorrow} {...props} />
+        !error ? <Table handleMint={handleMint} handleBorrow={handleBorrow} {...props} />
+          : <ErrorBoundary error={error} />
       )}
     </div>
   )

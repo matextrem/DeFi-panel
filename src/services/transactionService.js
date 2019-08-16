@@ -31,6 +31,7 @@ const TransactionService = {
 
   getTokenBalance: async (web3, token) => {
     const networkId = await getNetwork(web3)
+    if (!ERC20[token][networkId]) return undefined
     const ERC20Contract = new web3.eth.Contract(ERC20.ABI, ERC20[token][networkId].address)
     const account = (await web3.eth.getAccounts())[0]
     const balance = await ERC20Contract.methods.balanceOf(account).call()
