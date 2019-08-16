@@ -50,7 +50,7 @@ function App () {
       </header>
       <main>
         <div className='App-content'>
-          <Panel networkId={networkId} provider={provider} account={account} protocols={protocols} />
+          <Panel networkId={networkId} web3={provider} account={account} protocols={protocols} />
         </div>
       </main>
     </div>

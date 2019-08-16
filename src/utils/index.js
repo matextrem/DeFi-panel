@@ -10,10 +10,13 @@ export const networkIds = {
   1: 'Mainnet',
   3: 'Ropsten',
   4: 'Rinkeby',
-  42: 'Koban',
+  42: 'Kovan',
   0: 'Uknown'
 }
-
+export const protocolsName = {
+  compound: 'Compound',
+  dydx: 'dYdX'
+}
 export const cTokens = {
   DAI: {
     4: {
@@ -62,8 +65,7 @@ export const getAccount = async () => {
     window.web3 = new Web3(window.ethereum)
     try {
       // Request account access if needed
-      const pepe = await window.ethereum.enable()
-      console.log(pepe)
+      await window.ethereum.enable()
       // Acccounts now exposed
     } catch (error) {
       // User denied account access...
