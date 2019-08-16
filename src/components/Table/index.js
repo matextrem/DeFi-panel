@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Table.scss';
-import { tokenSymbols } from '../../utils';
+import { tokenSymbols, protocolInNetwork } from '../../utils';
 import transactionService from '../../services/transactionService';
 import TxModal from '../TxModal';
 
@@ -41,7 +41,7 @@ function Table(props) {
 
   const closeModal = () => setModalOpen(false);
 
-  const { account, protocols, web3 } = props;
+  const { account, protocols, web3, networkId } = props;
   return (
     <div className="interest-rates">
       <TxModal isOpen={isModalOpen}
@@ -110,11 +110,11 @@ function Table(props) {
                       <div className="protocol-row name" />
                       <div className="protocol-row action-values">
                         {protocol.rates.map(rate => (
-                          <div key={rate.token} className="percentage-column">
-                            <div className="percentage lend" onClick={() => mint(protocol, rate.token)}>
+                          <div key={rate.token} className={`percentage-column ${!protocolInNetwork(protocol.name, networkId) && 'not-allowed'}`}>
+                            <div className="percentage lend" onClick={() => protocolInNetwork(protocol.name, networkId) ? mint(protocol, rate.token) : false}>
                               <div className="rate-value">{rate.supply_rate}%</div>
                             </div>
-                            <div className="percentage borrow inverse" onClick={() => borrow(protocol, rate.token)}>
+                            <div className="percentage borrow inverse" onClick={() => protocolInNetwork(protocol.name, networkId) ? borrow(protocol, rate.token) : false}>
                               <div className="rate-value">{rate.borrow_rate}%</div>
                             </div>
                           </div>

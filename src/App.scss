@@ -6,9 +6,21 @@
   background-color: #282c34;
   display: flex;
   flex-direction: row;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 10px;
   font-size: calc(10px + 2vmin);
   color: white;
   p {
     margin-left: 10px;
+  }
+  .connect-button {
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+  .account-info {
+    font-size: 14px;
+    text-align: left;
   }
 }

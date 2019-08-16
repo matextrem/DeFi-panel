@@ -6,6 +6,15 @@ import ABIS from '../contracts';
 //  Ropsten: 3
 //  Kovan: 42
 
+export const networkIds = {
+    1: 'Mainnet',
+    3: 'Ropsten',
+    4: 'Rinkeby',
+    42: 'Koban',
+    0: 'Uknown'
+};
+
+
 export const cTokens = {
     'DAI': {
         4: {
@@ -40,13 +49,22 @@ export const ERC20 = {
 
 export const tokenSymbols = ['DAI', 'USDC'];
 
+export const protocolNetworks = {
+    'compound': [1, 3, 4],
+    'dydx': [1, 42]
+}
+
+export const protocolInNetwork = (protocol, networkId) => {
+    return protocolNetworks[protocol].includes(networkId) && networkId !== 0;
+};
 export const getAccount = async () => {
     // Modern dapp browsers...
     if (window.ethereum) {
         window.web3 = new Web3(window.ethereum);
         try {
             // Request account access if needed
-            await window.ethereum.enable();
+            const pepe = await window.ethereum.enable();
+            console.log(pepe);
             // Acccounts now exposed
         } catch (error) {
             // User denied account access...
@@ -72,7 +90,6 @@ export const getNetwork = async web3 => {
 };
 
 export const shortenAccount = account => account.slice(0, 6) + '...' + account.slice(account.length - 4);
-
 
 export const modalStyle = {
     content: {
