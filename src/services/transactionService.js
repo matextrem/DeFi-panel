@@ -1,4 +1,7 @@
+import BigNumber from 'bignumber.js'
 import { cTokens, ERC20, getNetwork } from '../utils'
+import { Solo, AmountReference, AmountDenomination, ConfirmationType } from '@dydxprotocol/solo'
+
 const TransactionService = {
   approveTx: async (web3, value, token) => {
     // creating contracts object
@@ -35,11 +38,53 @@ const TransactionService = {
     return newTokenBalance
   },
 
+  getDyDxData: async (provider, value, token) => {
+    const networkId = await getNetwork(provider)
+    const account = (await provider.eth.getAccounts())[0]
+    const tokenDecimals = ERC20[token].decimals
+    const amount = (Number(value) * Math.pow(10, tokenDecimals)).toString()
+    const solo = new Solo(provider, networkId)
+    const operation = solo.operation.initiate()
+    const dydxData = {
+      primaryAccountOwner: account,
+      primaryAccountId: new BigNumber('0'),
+      marketId: new BigNumber(ERC20[token].marketId),
+      amount: {
+        value: new BigNumber(amount),
+        reference: AmountReference.Delta,
+        denomination: AmountDenomination.Actual
+      }
+    }
+    return { operation, dydxData, account }
+  },
+
   mintCompound: async (web3, value, token, cb) => {
     const networkId = await getNetwork(web3)
     const { CTokenContract, amount } = await TransactionService.approveTx(web3, value, token)
     const data = await CTokenContract.methods.mint(amount).encodeABI()
     return TransactionService.getTransaction(web3, data, cTokens[token][networkId].address, cb)
+  },
+
+  mintDyDx: async (web3, value, token) => {
+    const { operation, dydxData, account } = await TransactionService.getDyDxData(web3, value, token)
+    const dydxObj = { ...dydxData, from: account }
+    await operation.deposit(dydxObj)
+    return operation.commit({
+      from: account,
+      gasPrice: '1000000000',
+      confirmationType: ConfirmationType.Confirmed
+    })
+  },
+
+  borrowDyDx: async (web3, value, token) => {
+    const { operation, dydxData, account } = await TransactionService.getDyDxData(web3, value, token)
+    const dydxObj = { ...dydxData, to: account }
+    await operation.withdraw(dydxObj)
+    return operation.commit({
+      from: account,
+      gasPrice: '1000000000',
+      confirmationType: ConfirmationType.Confirmed
+    })
   },
 
   borrowCompound: async (web3, value, token, cb) => {

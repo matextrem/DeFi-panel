@@ -42,8 +42,8 @@ function TxModal (props) {
         await transactionService.mintCompound(web3, tokens, market.symbol, handleCallback)
         break
       case 'dydx':
+        await transactionService.mintDyDx(web3, tokens, market.symbol)
         break
-
       default:
         break
     }
@@ -56,9 +56,8 @@ function TxModal (props) {
         await transactionService.borrowCompound(web3, tokens, market.symbol, handleCallback)
         break
       case 'dydx':
-
+        await transactionService.borrowDyDx(web3, tokens, market.symbol)
         break
-
       default:
         break
     }
